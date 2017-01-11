@@ -4,14 +4,15 @@
  
  And BONUS: placing obstacles in Mars, and functions isNoObstacleForward and isNoObstacleBackwards to detect it.
  
+ And superbonus, with two rovers... named usRover and rusRover. old myRover is now usRover. Added nationality to rovers.
+ A rover can be obstaculized by an obstacle and by other rover.
+ 
  */
 
 
-//this is variable object javascript, the rover initially at [0,0]
-var myRover = {
-  position: [0,0],
-  direction: 'N'
-};
+
+
+/* FUNCTIONS */
 
 /*-------------------------------*/
 //function goForward, move rover forward and update Mars
@@ -31,9 +32,9 @@ function goForward(rover,mars) {
       rover.position[1]--
       break;
   };
-    mars[rover.position[0]][rover.position[1]]='R'; //ocupa la posicion de llegada
+    mars[rover.position[0]][rover.position[1]]='X'; //ocupa la posicion de llegada
     console.log("New Rover Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
-    console.log("Terreno lunar: "+mars[rover.position[0]][rover.position[1]]);
+    console.log("Mars surface: "+mars[rover.position[0]][rover.position[1]]);
 }
 
 /*------------------------------*/
@@ -54,7 +55,7 @@ function goBackward(rover,mars) {
             rover.position[1]++
             break;
     };
-    mars[rover.position[0]][rover.position[1]]='R';
+    mars[rover.position[0]][rover.position[1]]='X';
     console.log("New Rover Position: [" + rover.position[0] + ", " + rover.position[1] + "]");
     console.log("Mars surface: "+mars[rover.position[0]][rover.position[1]]);
     
@@ -103,7 +104,7 @@ function turnLeft(rover){
 }
 
 /*------------------------*/
-//function isGridFreeForward; states if rover are NOT in "border of Mars" (return true), and it can go on.
+//function isGridFreeForward; states if rover are NOT in "border of Mars" (return true), and it can go on backward.
 function isGridFreeForward(rover) {
     var kamiRover; //rover kamikaze explore, not really necessary
     kamiRover=rover;
@@ -111,18 +112,30 @@ function isGridFreeForward(rover) {
         case 'N':
             if (kamiRover.position[0] < 9)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         case 'E':
             if (kamiRover.position[1] < 9)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         case 'S':
             if (kamiRover.position[0] >0)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+            return false;
+            }
             break;
         case 'W':
             if (kamiRover.position[1] >0)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         default:
             return false;
@@ -131,7 +144,7 @@ function isGridFreeForward(rover) {
 }
 
 /* ---------------------------------*/
-//function isGridFreeBackward states if rover are NOT in border of Mars (return true), and it can go on.
+//function isGridFreeBackward states if rover are NOT in border of Mars (return true), and it can go on backward.
 function isGridFreeBackward(rover) {
     var kamiRover; //rover kamikaze explore, not really necessary
     kamiRover=rover;
@@ -139,18 +152,30 @@ function isGridFreeBackward(rover) {
         case 'N':
             if (kamiRover.position[0] > 0)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         case 'E':
             if (kamiRover.position[1] > 0)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         case 'S':
             if (kamiRover.position[0] < 9)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         case 'W':
             if (kamiRover.position[1] < 9)
                 return true;
+            else {console.log("ROVER WILL GO OUT OF MARS!!!!");
+                return false;
+            }
             break;
         default:
             return false;
@@ -185,30 +210,68 @@ var myMars = marsGrid(10,10,' ');
 
 //function makeComands takes rover, mars and string of commands and execute it.
 function makeCommands(rover,mars,command) {
-    
+    if (rover.nationality=="USA"){
     switch(command) {
         case 'f':
             if (isGridFreeForward(rover) && isNoObstacleForward(rover,mars)) {
+                console.log("US ROVER forward movement");
                 goForward(rover,mars);}
             else {console.log("Huston, we have a problem!!!");
             }
             break;
         case 'b':
             if (isGridFreeBackward(rover) && isNoObstacleBackward(rover,mars)) {
+                console.log("US ROVER Backward movement");
                 goBackward(rover,mars);}
             else {console.log("Huston, we have a problem!!!");
             }
             break;
         case 'r':
+            console.log("US ROVER turn rigth");
             turnRigth(rover);
             break;
         case 'l':
+            console.log("US ROVER turn left");
             turnLeft(rover);
             break;
         default:
-            
+            console.log("INVALID COMMAND");
             
     };
+    }
+    
+    else
+        
+    if (rover.nationality=="Russian"){
+        switch(command) {
+            case 'f':
+                if (isGridFreeForward(rover) && isNoObstacleForward(rover,mars)) {
+                    console.log("RUS ROVER forward movement:");
+                    goForward(rover,mars);}
+                else {console.log("Baikonur, tenemos un problema!!!! ");
+                }
+                break;
+            case 'b':
+                if (isGridFreeBackward(rover) && isNoObstacleBackward(rover,mars)) {
+                    console.log("RUS ROVER backward movement");
+                    goBackward(rover,mars);}
+                else {console.log("Baikonur, tenemos un problema!!!! ");
+                }
+                break;
+            case 'r':
+                console.log("RUS ROVER turn rigth");
+                turnRigth(rover);
+                break;
+            case 'l':
+                console.log("RUS ROVER turn left");
+                turnLeft(rover);
+                break;
+            default:
+                console.log("INVALID COMMAND");
+
+        };
+
+    }
 }
 
 
@@ -225,28 +288,48 @@ function isNoObstacleForward (rover,mars){
     //var krover = rover;
     switch(rover.direction) {
         case 'N':
-            if (mars[rover.position[0]+1][rover.position[1]] != 'O')
+            if ((mars[rover.position[0]+1][rover.position[1]] != 'O') && (mars[rover.position[0]+1][rover.position[1]] != 'X'))
                 return true;
-            else
-                return false;
+            else if (mars[rover.position[0]+1][rover.position[1]] === 'O'){
+                    console.log("OBSTACLE FORWARD!!!!");
+                    return false;
+                    }
+                    else {console.log("ENEMY ROVER FORWARD!!!");
+                    return false;
+                    }
             break;
         case 'E':
-            if (mars[rover.position[0]][rover.position[1]+1] != 'O')
+            if ((mars[rover.position[0]][rover.position[1]+1] != 'O') && (mars[rover.position[0]][rover.position[1]+1] != 'X'))
                 return true;
-            else
-                return false
+            else if (mars[rover.position[0]][rover.position[1]+1] === 'O'){
+                    console.log("OBSTACLE FORWARD!!!!");
+                    return false;
+                    }
+                    else {console.log("ENEMY ROVER FORWARD!!!");
+                    return false;
+                    }
             break;
         case 'S':
-            if (mars[rover.position[0]-1][rover.position[1]] != 'O')
+            if ((mars[rover.position[0]-1][rover.position[1]] != 'O') && (mars[rover.position[0]-1][rover.position[1]] != 'X'))
                 return true;
-            else
-                return false;
+            else if (mars[rover.position[0]-1][rover.position[1]] === 'O'){
+                    console.log("OBSTACLE FORWARD!!!");
+                    return false;
+                    }
+                    else {console.log("ENEMY ROVER FORWARD!!!");
+                    return false;
+                    }
             break;
         case 'W':
-            if (mars[rover.position[0]][rover.position[1]-1] != 'O')
+            if ((mars[rover.position[0]][rover.position[1]-1] != 'O') && (mars[rover.position[0]][rover.position[1]-1] != 'X'))
                 return true;
-            else
-                return false;
+            else if (mars[rover.position[0]][rover.position[1]-1] === 'O'){
+                    console.log("OBSTACLE FORWARD!!!");
+                    return false;
+                    }
+                    else {console.log("ENEMY ROVER FORWARD!!!");
+                    return false;
+                    }
             break;
         default:
             return false;
@@ -260,28 +343,44 @@ function isNoObstacleBackward(rover,mars) {
     //var krover = rover;
     switch(rover.direction) {
         case 'N':
-            if (mars[rover.position[0]-1][rover.position[1]] != 'O')
+            if ((mars[rover.position[0]-1][rover.position[1]] != 'O') && (mars[rover.position[0]-1][rover.position[1]] != 'X'))
                 return true;
-            else
+            else if (mars[rover.position[0]-1][rover.position[1]] === 'O'){
+                console.log("OBSTACLE BACKWARD !!!!");
                 return false;
+            } else {console.log("ENEMY ROVER BACKWARD!!!");
+                return false;
+            }
             break;
         case 'E':
-            if (mars[rover.position[0]][rover.position[1]-1] != 'O')
+            if ((mars[rover.position[0]][rover.position[1]-1] != 'O') && (mars[rover.position[0]][rover.position[1]-1] != 'X'))
                 return true;
-            else
+            else if (mars[rover.position[0]][rover.position[1]-1] === 'O'){
+                console.log("OBSTACLE BACKWARD !!!!");
                 return false;
+            } else {console.log("ENEMY ROVER BACKWARD!!!");
+                return false;
+            }
             break;
         case 'S':
-            if (mars[rover.position[0]+1][rover.position[1]] != 'O')
+            if ((mars[rover.position[0]+1][rover.position[1]] != 'O') && (mars[rover.position[0]+1][rover.position[1]] != 'X'))
                 return true;
-            else
+            else if (mars[rover.position[0]+1][rover.position[1]] === 'O'){
+                console.log("OBSTACLE BACKWARD !!!!");
                 return false;
+            } else {console.log("ENEMY ROVER BACKWARD!!!");
+                return false;
+            }
             break;
         case 'W':
-            if (mars[rover.position[0]][rover.position[1]+1] != 'O')
+            if ((mars[rover.position[0]][rover.position[1]+1] != 'O') && (mars[rover.position[0]][rover.position[1]+1] != 'X'))
                 return true;
-            else
+            else if (mars[rover.position[0]][rover.position[1]+1] === 'O'){
+                console.log("OBSTACLE BACKWARD !!!!");
                 return false;
+            } else {console.log("ENEMY ROVER BACKWARD!!!");
+                return false;
+            }
             break;
         default:
             return false;
@@ -294,134 +393,100 @@ function isNoObstacleBackward(rover,mars) {
 /*      --- PRINCIPAL ---      */
 
 // initializing, placing obstacules in Mars
-placeObstacles(myMars,0,2);
-placeObstacles(myMars,3,1); //ejemplo inicial, es OK!!!
+placeObstacles(myMars,2,2);
+placeObstacles(myMars,4,2);
 placeObstacles(myMars,4,7);
+
+
+//Initializing, rover land in Mars. this is variable object javascript.
+var usRover = {
+position: [5,4],
+direction: 'N',
+nationality: "USA"
+};
+
+var rusRover = {
+position: [6,5],
+direction: 'S',
+nationality: "Russian"
+};
+
+
+
 
 //initializing, initial position rover
 
-console.log("Initial position of Rover: "+myRover.position);
-console.log("Initial direction of Rover: "+myRover.direction);
-myMars[myRover.position[0]][myRover.position[1]]='R'; //marca con R el terreno actualmente ocupado por el rover
-console.log("Mars surface under Rover: "+myMars[myRover.position[0]][myRover.position[1]]); //y lo muestra
-console.log("All OK, Rover begin to explore Mars");
+console.log("USA ROVER LANDED IN MARS");
+console.log("Initial position of usRover: "+usRover.position);
+console.log("Initial direction of usRover: "+usRover.direction);
+myMars[usRover.position[0]][usRover.position[1]]='X'; //marca con X inicialmente el terreno actualmente ocupado por el rover
+console.log("Mars surface under usRover: "+myMars[usRover.position[0]][usRover.position[1]]); //y lo muestra
+console.log("All OK, usRover begin to explore Mars");
 console.log("----------------------------------");
 
-//Movements, as example. If rover go forward or backwards, first explores if there's mars grid free and explores if there's no obstacles
 
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!!");
-    }
+console.log("RUSSIAN ROVER LANDED IN MARS");
+console.log("Initial position of rusRover: "+rusRover.position);
+console.log("Initial direction of rusRover: "+rusRover.direction);
+myMars[rusRover.position[0]][rusRover.position[1]]='X'; //marca con X el terreno actualmente ocupado por el rover
+console.log("Mars surface under rusRover: "+myMars[rusRover.position[0]][rusRover.position[1]]); //y lo muestra
+console.log("All OK, rusRover begin to explore Mars");
+console.log("----------------------------------");
 
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
 
-turnRigth(myRover);
 
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-else {console.log("Huston, we have a problem!!!");
+// Command strings introduced by promt
+
+var usCommandsArray;  //define an string of commands for us rover.
+var rusCommandsArray; //define an string of commands for rus rover.
+
+usCommandsArray = window.prompt("Introduccing comands for USA ROVER", "ffrfflffbfrf");
+rusCommandsArray = window.prompt("Introduccing comands for RUSSIAN ROVER", "ffrfflffbfrf");
+
+console.log("US and RUS string Commands EXECUTING, precondition: US and RUS number of commands (string.length) are the same !!");
+
+for (i=0; i<usCommandsArray.length; i++){
+    console.log("-------------------------------");
+    console.log("Rovers executing command number: "+(i+1));
+    console.log("US command executing now: "+usCommandsArray[i]);
+    makeCommands(usRover,myMars,usCommandsArray[i]);
+    console.log("RUS command executing now: "+rusCommandsArray[i]);
+    makeCommands(rusRover,myMars,rusCommandsArray[i]);
 }
 
-turnLeft(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-else {console.log("Huston, we have a problem!!!");
-}
-
-turnRigth(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-else {console.log("Huston, we have a problem!!!");
-}
-
-turnLeft(myRover);
-
-if (isGridFreeBackward(myRover) && isNoObstacleBackward(myRover,myMars)) {
-    goBackward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-if (isGridFreeBackward(myRover) && isNoObstacleBackward(myRover,myMars)) {
-    goBackward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-turnRigth(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-if (isGridFreeBackward(myRover) && isNoObstacleBackward(myRover,myMars)) {
-    goBackward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-turnRigth(myRover);
-turnRigth(myRover);
-turnRigth(myRover);
-turnRigth(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars ) ) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-turnLeft(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-    else {console.log("Huston, we have a problem!!!");
-    }
-
-turnLeft(myRover);
-
-if (isGridFreeForward(myRover) && isNoObstacleForward(myRover,myMars )) {
-    goForward(myRover,myMars);}
-else {console.log("Huston, we have a problem!!!");
-}
-
-
-// ITERATION 2 execution command string
-
-var commandsArray = "fbfbllffflbffffr";  //define an string of commands
-
-console.log("STRING COMMANDS EXECUTING !!");
-for (l=0; l<commandsArray.length; l++){
-    console.log("command executing now: "+commandsArray[l]);
-    makeCommands(myRover,myMars,commandsArray[l]);
-}
-
-
-// Rover final position
+// ROVERS final position
+console.log("______________________");
+console.log("ROVERS FINAL POSITION");
+// usRover final position
 console.log("------------------------------");
-console.log("Final state of Mars rover:");
-console.log("Final position of Mars Rover: "+myRover.position);
-console.log("Final direction of Mars Rover: "+myRover.direction);
-console.log("Marking Martian Terrain under Rover: "+myMars[myRover.position[0]][myRover.position[1]]);
+console.log("Final state of Mars usRover:");
+console.log("Final position of Mars usRover: "+usRover.position);
+console.log("Final direction of Mars usRover: "+usRover.direction);
+myMars[usRover.position[0]][usRover.position[1]] ='U';
+console.log("Marking Martian Terrain under usRover: "+myMars[usRover.position[0]][usRover.position[1]]);
+
+// rusRover final position
+console.log("------------------------------");
+console.log("Final state of Mars rusRover:");
+console.log("Final position of Mars rusRover: "+rusRover.position);
+console.log("Final direction of Mars rusRover: "+rusRover.direction);
+myMars[rusRover.position[0]][rusRover.position[1]] ='R';
+console.log("Marking Martian Terrain under rusRover: "+myMars[rusRover.position[0]][rusRover.position[1]]);
+
 
 //Mars surface at the end "R" is the place of rover
+console.log("__________________________________________");
+console.log("------------------------------------------");
 console.log("Mars surface at the end of movements");
-for (j=0; j<10;j++){
-    for (i = 0; i < 10; i++) {
+for (j=0; j<10; j++){
+    for (i=0; i<10; i++) {
         console.log(myMars[i][j]);
     }
 }
 
+console.log("warning, rows in vertical, columns horizontal");
+function maper(myMars){
+    console.log(myMars.join('\n') + '\n');
+    console.log("_______________________________________________");
+}
+maper(myMars);
